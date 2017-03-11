@@ -34,10 +34,10 @@
         android:id="@+id/forwardBt"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="@mipmap/ic_launcher"
         android:layout_below="@+id/batteryLabel"
+        android:layout_marginTop="27dp"
         android:layout_toEndOf="@+id/leftBt"
-        android:layout_marginTop="27dp" />
+        android:background="@mipmap/up" />
 
     <Button
         android:id="@+id/backwardBt"

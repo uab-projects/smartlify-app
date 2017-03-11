@@ -32,10 +32,10 @@
     <Button
         android:id="@+id/forwardBt"
         android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/takePictureBt"
+        android:layout_height="75dp"
         android:layout_toEndOf="@+id/leftBt"
-        android:background="@mipmap/btn_ctrl_t" />
+        android:background="@mipmap/btn_ctrl_t"
+        android:layout_below="@+id/takePictureBt" />
 
     <Button
         android:id="@+id/backwardBt"
@@ -51,9 +51,9 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:background="@mipmap/btn_ctrl_r"
-        android:layout_marginStart="22dp"
+        android:layout_marginStart="24dp"
         android:layout_above="@+id/backwardBt"
-        android:layout_toEndOf="@+id/backwardBt" />
+        android:layout_toEndOf="@+id/forwardBt" />
 
     <Button
         android:layout_width="wrap_content"

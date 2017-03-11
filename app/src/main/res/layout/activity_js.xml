@@ -12,13 +12,15 @@
         android:layout_height="match_parent"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Take picture"
         android:id="@+id/takePictureBt"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:width="150dp"
+        android:background="@mipmap/ic_launche"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:width="150dp"/>
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="17dp"
+        android:layout_marginTop="14dp" />
 
     <Button
         android:id="@+id/leftBt"

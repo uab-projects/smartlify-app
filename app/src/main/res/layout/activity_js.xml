@@ -21,40 +21,39 @@
         android:width="150dp"/>
 
     <Button
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="left"
         android:id="@+id/leftBt"
-        android:layout_centerVertical="true"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:background="@mipmap/btn_ctrl_l" />
 
     <Button
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:text="forward"
         android:id="@+id/forwardBt"
-        android:layout_above="@+id/leftBt"
-        android:layout_toRightOf="@+id/leftBt"
-        android:layout_toEndOf="@+id/leftBt"/>
-
-    <Button
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:text="backward"
-        android:id="@+id/backwardBt"
-        android:layout_below="@+id/leftBt"
-        android:layout_toRightOf="@+id/leftBt"
-        android:layout_toEndOf="@+id/leftBt"/>
-
-    <Button
         android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:text="right"
+        android:layout_below="@+id/takePictureBt"
+        android:layout_toEndOf="@+id/leftBt"
+        android:background="@mipmap/btn_ctrl_t" />
+
+    <Button
+        android:id="@+id/backwardBt"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_below="@+id/leftBt"
+        android:layout_toEndOf="@+id/leftBt"
+        android:layout_toRightOf="@+id/leftBt"
+        android:background="@mipmap/btn_ctrl_b" />
+
+    <Button
         android:id="@+id/rightBt"
-        android:layout_alignBaseline="@+id/leftBt"
-        android:layout_toRightOf="@+id/forwardBt"
-        android:layout_toEndOf="@+id/forwardBt"/>
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@mipmap/btn_ctrl_r"
+        android:layout_marginStart="22dp"
+        android:layout_above="@+id/backwardBt"
+        android:layout_toEndOf="@+id/backwardBt" />
 
     <Button
         android:layout_width="wrap_content"

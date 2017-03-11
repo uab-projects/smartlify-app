@@ -11,4 +11,6 @@
 
     <color name="selected_tab_color">#AAAAAA</color>
     <color name="unselected_tab_color">#CCCCCC</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

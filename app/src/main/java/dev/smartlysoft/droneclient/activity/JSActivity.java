@@ -1,14 +1,19 @@
 package dev.smartlysoft.droneclient.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
@@ -20,11 +25,18 @@ import com.parrot.arsdk.ardiscovery.ARDISCOVERY_PRODUCT_ENUM;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import com.parrot.arsdk.arsal.ARNativeData;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import android.os.Handler;
+
 import dev.smartlysoft.droneclient.R;
 
 import dev.smartlysoft.droneclient.audio.AudioPlayer;
 import dev.smartlysoft.droneclient.audio.AudioRecorder;
 import dev.smartlysoft.droneclient.drone.JSDrone;
+import dev.smartlysoft.droneclient.network.JSONReciver;
 import dev.smartlysoft.droneclient.view.JSVideoView;
 
 public class JSActivity extends AppCompatActivity {
@@ -51,9 +63,23 @@ public class JSActivity extends AppCompatActivity {
     }
     private AudioState mAudioState = AudioState.MUTE;
 
+
+
+    //CORE ELEEMENTS
+    private ArrayList wifiArrayList = new ArrayList();
+    private ArrayAdapter<String> arrayAdapter;
+    private Activity activity;
+    private Handler handler = new Handler();
+    private Runnable runnableCode;
+    private JSONObject json;
+
+    //UI
+    ListView wifiList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_js);
 
         Intent intent = getIntent();
@@ -100,6 +126,10 @@ public class JSActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    public void invalidate(){
+        wifiList.invalidateViews();
     }
 
     @Override
@@ -414,4 +444,62 @@ public class JSActivity extends AppCompatActivity {
             mJSDrone.sendStreamingFrame(data);
         }
     };
+
+
+
+    private class AsyncTcpConnection extends AsyncTask<Void,Void,Void> {
+
+        private String data;
+        private JSONObject json = new JSONObject();
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            JSONReciver rcv = new JSONReciver();
+            try {
+                json = rcv.recive();
+
+
+            } catch (Exception e) {
+                wifiArrayList.clear();
+                wifiArrayList.add("Net Error");
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            wifiArrayList.clear();
+            Iterator x = json.keys();
+            while (x.hasNext()){
+                String key = (String) x.next();
+                wifiArrayList.add(key);
+            }
+            invalidate();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onCancelled(Void aVoid) {
+            super.onCancelled(aVoid);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package dev.smartlysoft.droneclient.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,7 +50,7 @@ public class ClientActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         setContentView(R.layout.activity_client);
 
 
@@ -58,14 +59,56 @@ public class ClientActivity extends AppCompatActivity {
         connectBtn = (Button)findViewById(R.id.ConnectBtn);
         wifiList = (ListView)findViewById(R.id.WifiList);
 
-        wifiArrayList.add("Empty");
+        /*wifiArrayList.add("Empty");
 
         connectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AsyncTcpConnection().execute();
             }
-        });
+        });*/
+
+        new Thread(new Runnable() {
+            public void run() {
+                JSONReciver rcv = new JSONReciver();
+                JSONObject json;
+
+                while(true){
+                    try {
+                        json = rcv.recive();
+                        wifiArrayList.clear();
+                        Iterator x = json.keys();
+                        while (x.hasNext()){
+                            String key = (String) x.next();
+                            wifiArrayList.add(key);
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                invalidate();
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        wifiArrayList.clear();
+                        wifiArrayList.add("Net Error: " + System.currentTimeMillis());
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                invalidate();
+                            }
+                        });
+
+                    }
+
+
+
+                    SystemClock.sleep(500);
+                }
+            }
+        }).start();
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, wifiArrayList);
         wifiList.setAdapter(arrayAdapter);
@@ -85,6 +128,9 @@ public class ClientActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             JSONReciver rcv = new JSONReciver();
+
+            while(true)
+
             try {
                 json = rcv.recive();
 
@@ -94,8 +140,6 @@ public class ClientActivity extends AppCompatActivity {
                 wifiArrayList.add("Net Error");
 
             }
-
-            return null;
         }
 
         @Override

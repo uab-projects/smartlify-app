@@ -11,7 +11,7 @@ import java.net.Socket;
 public class JSONReciver {
 
     private String address = "192.168.2.200";
-    private int port = 7000;
+    private int port = 3000;
 
 
     public JSONReciver(){

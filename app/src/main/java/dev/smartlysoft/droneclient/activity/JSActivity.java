@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -65,7 +66,7 @@ public class JSActivity extends AppCompatActivity {
 
 
 
-    //CORE ELEEMENTS
+    //CORE ELEMENTS
     private ArrayList wifiArrayList = new ArrayList();
     private ArrayAdapter<String> arrayAdapter;
     private Activity activity;
@@ -92,6 +93,50 @@ public class JSActivity extends AppCompatActivity {
 
         mAudioPlayer = new AudioPlayer();
         mAudioRecorder = new AudioRecorder(mAudioListener);
+        wifiList = (ListView) findViewById(R.id.liveWify);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, wifiArrayList);
+        wifiList.setAdapter(arrayAdapter);
+        new Thread(new Runnable() {
+            public void run() {
+                JSONReciver rcv = new JSONReciver();
+                JSONObject json;
+
+                while(true){
+                    try {
+                        json = rcv.recive();
+                        wifiArrayList.clear();
+                        Iterator x = json.keys();
+                        while (x.hasNext()){
+                            String key = (String) x.next();
+                            wifiArrayList.add(key);
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                invalidate();
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        wifiArrayList.clear();
+                        wifiArrayList.add("Net Error: " + System.currentTimeMillis());
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                invalidate();
+                            }
+                        });
+
+                    }
+
+
+
+                    SystemClock.sleep(500);
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -444,62 +489,4 @@ public class JSActivity extends AppCompatActivity {
             mJSDrone.sendStreamingFrame(data);
         }
     };
-
-
-
-    private class AsyncTcpConnection extends AsyncTask<Void,Void,Void> {
-
-        private String data;
-        private JSONObject json = new JSONObject();
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            JSONReciver rcv = new JSONReciver();
-            try {
-                json = rcv.recive();
-
-
-            } catch (Exception e) {
-                wifiArrayList.clear();
-                wifiArrayList.add("Net Error");
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            wifiArrayList.clear();
-            Iterator x = json.keys();
-            while (x.hasNext()){
-                String key = (String) x.next();
-                wifiArrayList.add(key);
-            }
-            invalidate();
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onCancelled(Void aVoid) {
-            super.onCancelled(aVoid);
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-    }
 }

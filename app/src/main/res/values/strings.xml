@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Drone controller</string>
+    <string name="app_name">Smartlify</string>
 
     <string name="title_activity_main">MainActivity</string>
     <string name="dummy_button">Dummy Button</string>

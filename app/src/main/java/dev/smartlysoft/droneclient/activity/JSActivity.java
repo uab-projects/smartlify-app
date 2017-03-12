@@ -1,14 +1,20 @@
 package dev.smartlysoft.droneclient.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parrot.arsdk.arcommands.ARCOMMANDS_JUMPINGSUMO_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
@@ -20,11 +26,20 @@ import com.parrot.arsdk.ardiscovery.ARDISCOVERY_PRODUCT_ENUM;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import com.parrot.arsdk.arsal.ARNativeData;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import android.os.Handler;
+
 import dev.smartlysoft.droneclient.R;
 
+import dev.smartlysoft.droneclient.SSIDListAdapter;
 import dev.smartlysoft.droneclient.audio.AudioPlayer;
 import dev.smartlysoft.droneclient.audio.AudioRecorder;
 import dev.smartlysoft.droneclient.drone.JSDrone;
+import dev.smartlysoft.droneclient.network.JSONReciver;
 import dev.smartlysoft.droneclient.view.JSVideoView;
 
 public class JSActivity extends AppCompatActivity {
@@ -51,9 +66,23 @@ public class JSActivity extends AppCompatActivity {
     }
     private AudioState mAudioState = AudioState.MUTE;
 
+
+
+    //CORE ELEMENTS
+    private ArrayList<String[]> wifiArrayList = new ArrayList();
+    private SSIDListAdapter arrayAdapter;
+    private Activity activity;
+    private Handler handler = new Handler();
+    private Runnable runnableCode;
+    private JSONObject json;
+
+    //UI
+    ListView wifiList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_js);
 
         Intent intent = getIntent();
@@ -66,6 +95,55 @@ public class JSActivity extends AppCompatActivity {
 
         mAudioPlayer = new AudioPlayer();
         mAudioRecorder = new AudioRecorder(mAudioListener);
+        wifiList = (ListView) findViewById(R.id.liveWify);
+        SSIDListAdapter arrayAdapter = new SSIDListAdapter(this, wifiArrayList);
+        wifiList.setAdapter(arrayAdapter);
+        new Thread(new Runnable() {
+            public void run() {
+                JSONReciver rcv = new JSONReciver();
+                JSONObject json;
+
+                while(true){
+                    try {
+                        json = rcv.recive();
+                        wifiArrayList.clear();
+                        Iterator x = json.keys();
+                        while (x.hasNext()){
+                            String key = (String) x.next();
+                            String network[] = new String[4];
+                            network[0] = key;
+                            JSONArray details = json.getJSONArray(key);
+                            for(int i=0; i<details.length(); i++)
+                                network[i+1] = details.getString(i);
+                            wifiArrayList.add(network);
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                invalidate();
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        wifiArrayList.clear();
+                        wifiArrayList.add(new String[]{"Unable to scan APs","-","-","-"});
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                invalidate();
+                            }
+                        });
+
+                    }
+
+
+
+                    SystemClock.sleep(500);
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -100,6 +178,10 @@ public class JSActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    public void invalidate(){
+        wifiList.invalidateViews();
     }
 
     @Override

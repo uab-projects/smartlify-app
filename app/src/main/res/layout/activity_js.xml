@@ -14,29 +14,119 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
         <ListView
             android:id="@+id/liveWify"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
             android:layout_alignParentBottom="true"
+            android:layout_gravity="left"
+            android:layout_weight="1"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp"
-            />
+            tools:layout_editor_absoluteY="0dp" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
+            android:layout_weight="3"
             android:orientation="vertical">
-
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/layout_a"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/takePictureBt"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:width="150dp"
+                    android:background="@mipmap/ic_launche"
+                    tools:layout_editor_absoluteX="150dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <Button
+                    android:id="@+id/downloadBt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/battery"
+                    android:layout_weight="1"
+                    android:width="50dp"
+                    android:text="Download"
+                    tools:layout_editor_absoluteX="200dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <Button
+                    android:id="@+id/battery"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:background="@mipmap/battery"
+                    tools:layout_editor_absoluteX="378dp"
+                    tools:layout_editor_absoluteY="171dp" />
+
+                <TextView
+                    android:id="@+id/batteryLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:text="XXX%"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#ff0000"
+                    tools:layout_editor_absoluteX="319dp"
+                    tools:layout_editor_absoluteY="277dp" />
+
+                <TextView
+                    android:id="@+id/audioTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/audioBt"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:text="audio:"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#ff0000"
+                    tools:layout_editor_absoluteX="452dp"
+                    tools:layout_editor_absoluteY="372dp" />
+
+                <Button
+                    android:id="@+id/audioBt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/downloadBt"
+                    android:layout_alignEnd="@+id/batteryLabel"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignRight="@+id/batteryLabel"
+                    android:layout_weight="1"
+                    android:text="Mute"
+                    tools:layout_editor_absoluteX="444dp"
+                    tools:layout_editor_absoluteY="219dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_b"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -44,17 +134,6 @@
                     android:orientation="horizontal"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="220dp">
-
-                    <Button
-                        android:id="@+id/backwardBt"
-                        android:layout_width="88dp"
-                        android:layout_height="75dp"
-                        android:layout_above="@+id/audioTxt"
-                        android:layout_toEndOf="@+id/forwardBt"
-                        android:layout_weight="1"
-                        android:background="@mipmap/down"
-                        tools:layout_editor_absoluteX="414dp"
-                        tools:layout_editor_absoluteY="301dp" />
 
                     <Button
                         android:id="@+id/forwardBt"
@@ -66,6 +145,17 @@
                         android:layout_weight="1"
                         android:background="@mipmap/up"
                         tools:layout_editor_absoluteX="326dp"
+                        tools:layout_editor_absoluteY="301dp" />
+
+                    <Button
+                        android:id="@+id/leftBt"
+                        android:layout_width="88dp"
+                        android:layout_height="75dp"
+                        android:layout_above="@+id/audioTxt"
+                        android:layout_alignStart="@+id/battery"
+                        android:layout_weight="1"
+                        android:background="@mipmap/left"
+                        tools:layout_editor_absoluteX="237dp"
                         tools:layout_editor_absoluteY="301dp" />
 
                     <Button
@@ -82,110 +172,18 @@
                         tools:layout_editor_absoluteY="301dp" />
 
                     <Button
-                        android:id="@+id/leftBt"
+                        android:id="@+id/backwardBt"
                         android:layout_width="88dp"
                         android:layout_height="75dp"
                         android:layout_above="@+id/audioTxt"
-                        android:layout_alignStart="@+id/battery"
+                        android:layout_toEndOf="@+id/forwardBt"
                         android:layout_weight="1"
-                        android:background="@mipmap/left"
-                        tools:layout_editor_absoluteX="237dp"
+                        android:background="@mipmap/down"
+                        tools:layout_editor_absoluteX="414dp"
                         tools:layout_editor_absoluteY="301dp" />
+
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/downloadBt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toEndOf="@+id/battery"
-                    android:layout_weight="1"
-                    android:width="50dp"
-                    android:text="Download"
-                    tools:layout_editor_absoluteX="200dp"
-                    tools:layout_editor_absoluteY="0dp" />
-
-                <Button
-                    android:id="@+id/takePictureBt"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_weight="1"
-                    android:width="150dp"
-                    android:background="@mipmap/ic_launche"
-                    tools:layout_editor_absoluteX="150dp"
-                    tools:layout_editor_absoluteY="0dp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    tools:layout_editor_absoluteX="320dp"
-                    tools:layout_editor_absoluteY="0dp">
-
-                    <TextView
-                        android:id="@+id/audioTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/audioBt"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:text="audio:"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#ff0000"
-                        tools:layout_editor_absoluteX="452dp"
-                        tools:layout_editor_absoluteY="372dp" />
-
-                    <Button
-                        android:id="@+id/audioBt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/downloadBt"
-                        android:layout_alignEnd="@+id/batteryLabel"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignRight="@+id/batteryLabel"
-                        android:layout_weight="1"
-                        android:text="Mute"
-                        tools:layout_editor_absoluteX="444dp"
-                        tools:layout_editor_absoluteY="219dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="0dp">
-
-                    <Button
-                        android:id="@+id/battery"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_weight="1"
-                        android:background="@mipmap/battery"
-                        tools:layout_editor_absoluteX="378dp"
-                        tools:layout_editor_absoluteY="171dp" />
-
-                    <TextView
-                        android:id="@+id/batteryLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_weight="1"
-                        android:text="XXX%"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#ff0000"
-                        tools:layout_editor_absoluteX="319dp"
-                        tools:layout_editor_absoluteY="277dp" />
-                </LinearLayout>
-
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

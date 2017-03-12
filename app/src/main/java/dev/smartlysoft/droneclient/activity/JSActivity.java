@@ -26,6 +26,7 @@ import com.parrot.arsdk.ardiscovery.ARDISCOVERY_PRODUCT_ENUM;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import com.parrot.arsdk.arsal.ARNativeData;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import android.os.Handler;
 
 import dev.smartlysoft.droneclient.R;
 
+import dev.smartlysoft.droneclient.SSIDListAdapter;
 import dev.smartlysoft.droneclient.audio.AudioPlayer;
 import dev.smartlysoft.droneclient.audio.AudioRecorder;
 import dev.smartlysoft.droneclient.drone.JSDrone;
@@ -67,8 +69,8 @@ public class JSActivity extends AppCompatActivity {
 
 
     //CORE ELEMENTS
-    private ArrayList wifiArrayList = new ArrayList();
-    private ArrayAdapter<String> arrayAdapter;
+    private ArrayList<String[]> wifiArrayList = new ArrayList();
+    private SSIDListAdapter arrayAdapter;
     private Activity activity;
     private Handler handler = new Handler();
     private Runnable runnableCode;
@@ -94,7 +96,7 @@ public class JSActivity extends AppCompatActivity {
         mAudioPlayer = new AudioPlayer();
         mAudioRecorder = new AudioRecorder(mAudioListener);
         wifiList = (ListView) findViewById(R.id.liveWify);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, wifiArrayList);
+        SSIDListAdapter arrayAdapter = new SSIDListAdapter(this, wifiArrayList);
         wifiList.setAdapter(arrayAdapter);
         new Thread(new Runnable() {
             public void run() {
@@ -108,7 +110,12 @@ public class JSActivity extends AppCompatActivity {
                         Iterator x = json.keys();
                         while (x.hasNext()){
                             String key = (String) x.next();
-                            wifiArrayList.add(key);
+                            String network[] = new String[4];
+                            network[0] = key;
+                            JSONArray details = json.getJSONArray(key);
+                            for(int i=0; i<details.length(); i++)
+                                network[i+1] = details.getString(i);
+                            wifiArrayList.add(network);
                         }
 
                         runOnUiThread(new Runnable() {
@@ -120,7 +127,7 @@ public class JSActivity extends AppCompatActivity {
 
                     } catch (Exception e) {
                         wifiArrayList.clear();
-                        wifiArrayList.add("Net Error: " + System.currentTimeMillis());
+                        wifiArrayList.add(new String[]{"Unable to scan APs","-","-","-"});
 
                         runOnUiThread(new Runnable() {
                             @Override
